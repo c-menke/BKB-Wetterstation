@@ -125,13 +125,13 @@
                         var title = data.sensors[i].title;
                         var lastMeasurement = data.sensors[i].lastMeasurement.value;
                         var createdAt = data.sensors[i].lastMeasurement.createdAt;
-                        var date = createdAt.getDate() + "." + createdAt.getMonth()+1 + "." + createdAt.getFullYear();
+                        //var date = createdAt.getDate() + "." + createdAt.getMonth()+1 + "." + createdAt.getFullYear();
                         var unit = data.sensors[i].unit;
                     } catch(err) {
                         //TODO: Error Handling
                     }
                     
-                    $("#data").append("<div class='card'><h1>" + lastMeasurement + unit + "</h1><p>" + title + "</p><span>" + date + "</span></div>");
+                    $("#data").append("<div class='card'><h1>" + lastMeasurement + unit + "</h1><p>" + title + "</p><span>" + createdAt + "</span></div>");
                 }
             });
         }
