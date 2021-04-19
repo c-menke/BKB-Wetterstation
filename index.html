@@ -125,7 +125,7 @@
                         var title = data.sensors[i].title;
                         var lastMeasurement = data.sensors[i].lastMeasurement.value;
                         var createdAt = data.sensors[i].lastMeasurement.createdAt;
-                        var date = new Date(createdAt);
+                        var date = createdAt.getDate() + "." + createdAt.getMonth()+1 + "." + createdAt.getFullYear();
                         var unit = data.sensors[i].unit;
                     } catch(err) {
                         //TODO: Error Handling
