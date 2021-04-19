@@ -1,0 +1,147 @@
+<html>
+
+<head>
+    <title>Berufskolleg Beckum - Wetterstation</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,900;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+    <style>
+        :root {
+            --color-blue: #1442AD;
+            --color-white: #F5F5F5F5;
+        }
+        
+        html {
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            height: 100%;
+            
+            margin: 0;
+            padding: 0;
+            
+            background-color: var(--color-white);
+            color: var(--color-blue);
+        }
+        .wrapper {
+            display: flex;
+            flex-flow: column;
+            
+            height: 100%;
+        }
+        
+        .wrapper header {
+            flex: 0 1 auto;
+            
+            display: flex;
+            justify-content: center;
+            
+            padding: 16px 0 0 0;
+        }
+        .wrapper header img {
+            width: 90%;        
+        }
+
+        .flex-container {
+            flex: 1 1 auto;
+            
+            display: flex;
+            
+            flex: 1;
+            flex-flow: row wrap;
+            justify-content: center;
+            align-content: center;
+        }
+        
+        .card {
+            background-color: rgba(255, 255, 255, .20);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.35);
+            border-radius: 15px;
+            
+            max-width: 400px;
+            flex-basis: 100%;
+            
+            margin: 16px;
+            padding: 8px;
+            
+            font-size: 120%;
+            text-align: center;
+        }
+        
+        .wrapper footer {
+            flex: 0 1 40px;
+            
+            display: flex;
+            justify-content: center;
+        }
+        
+        @media screen and (min-width: 480px) {
+            .wrapper header > img {
+                width: 90%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>   
+    <div class="wrapper">
+       <header>
+           <a href="https://bk-beckum.kreis-warendorf.de/startseite"><img src="https://bk-beckum.kreis-warendorf.de/fileadmin/templates/bk-beckum/img/bklogo.png"></a>
+       </header>
+       
+        <div class="flex-container" id="data"></div>
+        
+        <footer>
+            <p><b>footer</b> with fixed height</p>
+        </footer>
+    </div>
+    
+    <script>
+        var updateInterval = 60000;
+        
+        var url = "https://api.opensensemap.org/boxes/";
+        var senseID = "5cf8c8fa07460b001b4dccad";
+
+        function getSenseBoxData() {
+            var r = $.ajax(url + senseID + '/sensors');
+            return r;
+        }
+        
+        function getSenseBoxData() {
+            $("#data").html("");
+            
+            var data = $.getJSON(url + senseID + '/sensors', function(data) { 
+                for(var i = 0; i < data.sensors.length; i++) {
+                    try {
+                        var title = data.sensors[i].title;
+                        var lastMeasurement = data.sensors[i].lastMeasurement.value;
+                        var createdAt = data.sensors[i].lastMeasurement.createdAt;
+                        var date = new Date(createdAt);
+                        var unit = data.sensors[i].unit;
+                    } catch(err) {
+                        //TODO: Error Handling
+                    }
+                    
+                    $("#data").append("<div class='card'><h1>" + lastMeasurement + unit + "</h1><p>" + title + "</p><span>" + createdAt + "</span></div>");
+                }
+            });
+        }
+        
+        $(document).ready(function() {
+            getSenseBoxData();
+            
+            setInterval(function() { location.reload(); }, updateInterval);
+        });
+    </script>
+</body>
+
+</html>
